@@ -3,154 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario Raccolta Rifiuti Cazzago - Zona Rossa</title>
-
-    <!-- Meta tags for sharing (Open Graph) -->
-    <meta property="og:title" content="Calendario Raccolta Rifiuti Cazzago - Zona Rossa">
-    <meta property="og:description" content="Consulta il calendario della raccolta differenziata.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://placehold.co/1200x630/ef4444/ffffff?text=Calendario+Rifiuti+Cazzago+-+Zona+Rossa">
-    <meta property="og:url" content="#">
-
+    <title>Calendario Raccolta Rifiuti Zona Rossa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .nav-btn:focus {
-            outline: 2px solid #f87171; /* Red-400 */
-            outline-offset: 2px;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .waste-card { transition: all 0.3s ease; }
     </style>
 </head>
-<body class="bg-red-500 flex items-center justify-center min-h-screen"> <!-- Sfondo rosso intenso -->
-    <div class="w-full max-w-2xl mx-auto p-4 sm:p-6">
-        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 text-center">
-            <!-- Header Section -->
-            <div class="flex justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3.5 9.09h17"></path><path d="M21 8.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8.5"></path><path d="M12 18h.01"></path><path d="M12 14h.01"></path><path d="M16 18h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M8 14h.01"></path></svg>
-            </div>
-            
-            <h1 class="text-3xl sm:text-4xl font-bold text-red-600 mb-2">ZONA ROSSA</h1>
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4" id="current-day-display"></h2>
-            
-            <!-- Schedule Display -->
-            <div class="bg-red-50 rounded-lg p-4 sm:p-6 mt-4 border border-red-200 min-h-[100px] flex items-center justify-center">
-                <p class="text-lg sm:text-xl text-gray-700" id="collection-schedule"></p>
-            </div>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-            <!-- Navigation Buttons -->
-            <div class="flex items-center justify-between mt-8">
-                <button id="prev-day" class="nav-btn bg-gray-200 text-gray-700 hover:bg-gray-300 font-bold p-3 rounded-full transition-transform transform hover:scale-105">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <button id="go-to-today" class="nav-btn bg-red-500 text-white hover:bg-red-600 font-semibold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">
-                    Oggi
-                </button>
-                <button id="next-day" class="nav-btn bg-gray-200 text-gray-700 hover:bg-gray-300 font-bold p-3 rounded-full transition-transform transform hover:scale-105">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
+    <div id="app" class="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden waste-card">
+        <!-- Header -->
+      <div class="bg-red-600 p-6 text-white text-center relative">
+            <h1 class="text-sm uppercase tracking-widest font-semibold opacity-80">Calendario Rifiuti - Zona Rossa</h1>
+            <div id="date-label" class="text-3xl font-bold mt-1">Domani</div>
+            <div id="full-date" class="text-emerald-100 text-sm mt-1 italic">--</div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8">
+            <div id="waste-content" class="flex flex-col items-center justify-center min-h-[200px]">
+                <!-- Contenuto dinamico inserito da JS -->
+                <div class="animate-pulse flex flex-col items-center">
+                    <div class="h-20 w-20 bg-gray-200 rounded-full mb-4"></div>
+                    <div class="h-4 w-48 bg-gray-200 rounded"></div>
+                </div>
             </div>
-            
-            <!-- Sezione IA rimossa -->
-            
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex border-t border-gray-100">
+            <button onclick="changeDate(-1)" class="flex-1 py-6 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-100 group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover:text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span class="text-xs text-gray-400 mt-1 uppercase font-bold">Indietro</span>
+            </button>
+            <button onclick="resetToTomorrow()" class="px-6 hover:bg-gray-50 text-emerald-600 font-bold text-xs uppercase tracking-tighter">
+                Domani
+            </button>
+            <button onclick="changeDate(1)" class="flex-1 py-6 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 group-hover:text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                <span class="text-xs text-gray-400 mt-1 uppercase font-bold">Avanti</span>
+            </button>
         </div>
     </div>
-    
-    <!-- Modale IA rimosso -->
 
     <script>
-        // --- DATA AND STATE ---
-        const schedule = {
-            // APRILE 2025
-            "2025-04-01": "UO", "2025-04-02": "C", "2025-04-03": "S", "2025-04-04": "UO", "2025-04-07": "VL", "2025-04-08": "UO VR", "2025-04-11": "UO", "2025-04-14": "P", "2025-04-15": "UO", "2025-04-16": "C", "2025-04-17": "S", "2025-04-18": "UO", "2025-04-22": "UO VR", "2025-04-25": "UO (Liberazione)", "2025-04-28": "P", "2025-04-29": "UO", "2025-04-30": "C",
-            // MAGGIO 2025
-            "2025-05-01": "S (Festa del Lavoro)", "2025-05-02": "UO", "2025-05-05": "VL", "2025-05-06": "UO VR", "2025-05-09": "UO", "2025-05-12": "P", "2025-05-13": "UO", "2025-05-14": "C", "2025-05-15": "S", "2025-05-16": "UO", "2025-05-20": "UO VR", "2025-05-23": "UO", "2025-05-26": "P", "2025-05-27": "UO", "2025-05-28": "C", "2025-05-29": "S", "2025-05-30": "UO",
-            // GIUGNO 2025
-            "2025-06-02": "VL (Repubblica)", "2025-06-03": "UO VR", "2025-06-06": "UO", "2025-06-09": "P", "2025-06-10": "UO", "2025-06-11": "C", "2025-06-12": "S", "2025-06-13": "UO", "2025-06-17": "UO VR", "2025-06-20": "UO", "2025-06-23": "P", "2025-06-24": "UO", "2025-06-25": "C", "2025-06-26": "S", "2025-06-27": "UO", "2025-06-30": "VL",
-            // LUGLIO 2025
-            "2025-07-01": "UO VR", "2025-07-04": "UO", "2025-07-07": "P", "2025-07-08": "UO", "2025-07-09": "C", "2025-07-10": "S", "2025-07-11": "UO", "2025-07-15": "UO VR", "2025-07-18": "UO", "2025-07-21": "P", "2025-07-22": "UO", "2025-07-23": "C", "2025-07-24": "S", "2025-07-25": "UO", "2025-07-28": "VL", "2025-07-29": "UO VR",
-            // AGOSTO 2025
-            "2025-08-01": "UO", "2025-08-04": "P", "2025-08-05": "UO", "2025-08-06": "C", "2025-08-07": "S", "2025-08-08": "UO", "2025-08-12": "UO VR", "2025-08-15": "UO (Ferragosto)", "2025-08-18": "P", "2025-08-19": "UO", "2025-08-20": "C", "2025-08-21": "S", "2025-08-22": "UO", "2025-08-25": "VL", "2025-08-26": "UO VR", "2025-08-29": "UO",
-            // SETTEMBRE 2025
-            "2025-09-01": "P", "2025-09-02": "UO", "2025-09-03": "C", "2025-09-04": "S", "2025-09-05": "UO", "2025-09-09": "UO VR", "2025-09-12": "UO", "2025-09-15": "P", "2025-09-16": "UO", "2025-09-17": "C", "2025-09-18": "S", "2025-09-19": "UO", "2025-09-22": "VL", "2025-09-23": "UO VR", "2025-09-26": "UO", "2025-09-29": "P", "2025-09-30": "UO",
-            // OTTOBRE 2025
-            "2025-10-01": "C", "2025-10-02": "S", "2025-10-03": "UO", "2025-10-07": "UO VR", "2025-10-10": "UO", "2025-10-13": "P", "2025-10-14": "UO", "2025-10-15": "C", "2025-10-16": "S", "2025-10-17": "UO", "2025-10-20": "VL", "2025-10-21": "UO VS", "2025-10-24": "UO", "2025-10-27": "P", "2025-10-28": "UO", "2025-10-29": "C", "2025-10-30": "S", "2025-10-31": "UO",
-            // NOVEMBRE 2025
-            "2025-11-04": "UO VR", "2025-11-07": "UO", "2025-11-10": "P", "2025-11-11": "UO", "2025-11-12": "C", "2025-11-13": "S", "2025-11-14": "UO", "2025-11-17": "VL", "2025-11-18": "UO VR", "2025-11-21": "UO", "2025-11-24": "P", "2025-11-25": "UO", "2025-11-26": "C", "2025-11-27": "S", "2025-11-28": "UO",
-            // DICEMBRE 2025
-            "2025-12-02": "UO", "2025-12-05": "UO", "2025-12-08": "P (Immacolata Conc.)", "2025-12-09": "UO", "2025-12-10": "C", "2025-12-11": "S", "2025-12-12": "UO", "2025-12-15": "VL", "2025-12-16": "UO VR", "2025-12-19": "UO", "2025-12-22": "P", "2025-12-23": "UO", "2025-12-24": "C", "2025-12-26": "UO (S. Stefano)", "2025-12-28": "S", "2025-12-30": "UO",
-            // GENNAIO 2026
-            "2026-01-02": "UO", "2026-01-05": "P", "2026-01-06": "UO (Epifania)", "2026-01-07": "C", "2026-01-08": "S", "2026-01-09": "UO", "2026-01-12": "VL", "2026-01-13": "UO VR", "2026-01-16": "UO", "2026-01-19": "P", "2026-01-20": "UO", "2026-01-21": "C", "2026-01-22": "S", "2026-01-23": "UO", "2026-01-26": "P", "2026-01-27": "UO", "2026-01-30": "UO",
-            // FEBBRAIO 2026
-            "2026-02-02": "P", "2026-02-03": "UO", "2026-02-04": "C", "2026-02-05": "S", "2026-02-06": "UO", "2026-02-09": "VL", "2026-02-10": "UO VR", "2026-02-13": "UO", "2026-02-16": "P", "2026-02-17": "UO", "2026-02-18": "C", "2026-02-19": "S", "2026-02-20": "UO", "2026-02-23": "P", "2026-02-24": "UO", "2026-02-27": "UO",
-            // MARZO 2026
-            "2026-03-02": "P", "2026-03-03": "UO", "2026-03-04": "C", "2026-03-05": "S", "2026-03-06": "UO", "2026-03-09": "VL", "2026-03-10": "UO VS", "2026-03-13": "UO", "2026-03-16": "P", "2026-03-17": "UO", "2026-03-18": "C", "2026-03-19": "S", "2026-03-20": "UO", "2026-03-23": "P", "2026-03-24": "UO VR", "2026-03-27": "UO", "2026-03-30": "P", "2026-03-31": "UO"
+        // Database dei rifiuti (Chiave: YYYY-MM-DD)
+        const wasteData = {
+            
+// GENNAIO 2026
+"2026-01-02": "Umido Organico", 
+"2026-01-05": "Plastica", 
+"2026-01-06": "Umido Organico", 
+"2026-01-07": "Carta Cartone", 
+"2026-01-08": "Secco", "2026-01-09": 
+"Umido Organico", "2026-01-12": "Vetro Lattine", 
+"2026-01-13": "Verde e Ramaglie (VR), Umido Organico", 
+"2026-01-16": "Umido Organico", "2026-01-19": "Plastica", 
+"2026-01-20": "Umido Organico", "2026-01-21": "Carta Cartone", 
+"2026-01-22": "Secco", "2026-01-23": "Umido Organico", 
+"2026-01-27": "Umido Organico", 
+"2026-01-30": "Umido Organico",
+
+// FEBBRAIO 2026
+"2026-02-02": "Plastica", "2026-02-03": "Umido Organico", "2026-02-04": "Carta Cartone", "2026-02-05": "Secco", "2026-02-06": "Umido Organico", "2026-02-09": "Vetro Lattine", "2026-02-10": "Verde e Ramaglie (VR), Umido Organico", "2026-02-13": "Umido Organico", "2026-02-16": "Plastica", "2026-02-17": "Umido Organico", "2026-02-18": "Carta Cartone", "2026-02-19": "Secco", "2026-02-20": "Umido Organico", "2026-02-24": "Umido Organico", "2026-02-27": "Umido Organico",
+
+// MARZO 2026
+"2026-03-02": "Vetro Plastica Lattine", "2026-03-03": "Umido Organico", "2026-03-04": "Carta Cartone", "2026-03-05": "Secco", "2026-03-06": "Umido Organico", "2026-03-10": "Umido Organico", "2026-03-12": "Verde e Ramaglie (VS)", "2026-03-13": "Umido Organico", "2026-03-16": "Vetro Plastica Lattine", "2026-03-17": "Umido Organico", "2026-03-18": "Carta Cartone", "2026-03-19": "Secco", "2026-03-20": "Umido Organico", "2026-03-24": "Umido Organico", "2026-03-26": "Verde e Ramaglie (VR)", "2026-03-27": "Umido Organico", "2026-03-30": "Vetro Plastica Lattine", "2026-03-31": "Umido Organico",
+
+// APRILE 2026
+"2026-04-01": "Carta Cartone", "2026-04-02": "Secco", "2026-04-03": "Umido Organico", "2026-04-07": "Umido Organico", "2026-04-09": "Verde e Ramaglie (VR)", "2026-04-10": "Umido Organico", "2026-04-13": "Vetro Plastica Lattine", "2026-04-14": "Umido Organico", "2026-04-15": "Carta Cartone", "2026-04-16": "Secco", "2026-04-17": "Umido Organico", "2026-04-21": "Umido Organico", "2026-04-23": "Verde e Ramaglie (VR)", "2026-04-24": "Umido Organico", "2026-04-27": "Vetro Plastica Lattine", "2026-04-28": "Umido Organico", "2026-04-29": "Carta Cartone", "2026-04-30": "Secco",
+
+// MAGGIO 2026
+"2026-05-01": "Umido Organico", "2026-05-05": "Umido Organico", "2026-05-07": "Verde e Ramaglie (VR)", "2026-05-08": "Umido Organico", "2026-05-11": "Vetro Plastica Lattine", "2026-05-12": "Umido Organico", "2026-05-13": "Carta Cartone", "2026-05-14": "Secco", "2026-05-15": "Umido Organico", "2026-05-19": "Umido Organico", "2026-05-21": "Verde e Ramaglie (VR)", "2026-05-22": "Umido Organico", "2026-05-25": "Vetro Plastica Lattine", "2026-05-26": "Umido Organico", "2026-05-27": "Carta Cartone", "2026-05-28": "Secco",
+
+// GIUGNO 2026
+"2026-06-02": "Umido Organico", "2026-06-04": "Verde e Ramaglie (VR)", "2026-06-05": "Umido Organico", "2026-06-08": "Vetro Plastica Lattine", "2026-06-09": "Umido Organico", "2026-06-10": "Carta Cartone", "2026-06-11": "Secco", "2026-06-12": "Umido Organico", "2026-06-16": "Umido Organico", "2026-06-18": "Verde e Ramaglie (VR)", "2026-06-19": "Umido Organico", "2026-06-22": "Vetro Plastica Lattine", "2026-06-23": "Umido Organico", "2026-06-24": "Carta Cartone", "2026-06-25": "Secco", "2026-06-26": "Umido Organico", "2026-06-30": "Umido Organico",
+
+// LUGLIO 2026
+"2026-07-02": "Verde e Ramaglie (VR)", "2026-07-03": "Umido Organico", "2026-07-06": "Vetro Plastica Lattine", "2026-07-07": "Umido Organico", "2026-07-08": "Carta Cartone", "2026-07-09": "Secco", "2026-07-10": "Umido Organico", "2026-07-14": "Umido Organico", "2026-07-16": "Verde e Ramaglie (VR)", "2026-07-17": "Umido Organico", "2026-07-20": "Vetro Plastica Lattine", "2026-07-21": "Umido Organico", "2026-07-22": "Carta Cartone", "2026-07-23": "Secco", "2026-07-24": "Umido Organico", "2026-07-28": "Umido Organico", "2026-07-30": "Verde e Ramaglie (VR)", "2026-07-31": "Umido Organico",
+
+// AGOSTO 2026
+"2026-08-03": "Vetro Plastica Lattine", "2026-08-04": "Umido Organico", "2026-08-05": "Carta Cartone", "2026-08-06": "Secco", "2026-08-07": "Umido Organico", "2026-08-11": "Umido Organico", "2026-08-13": "Verde e Ramaglie (VR)", "2026-08-14": "Umido Organico", "2026-08-17": "Vetro Plastica Lattine", "2026-08-18": "Umido Organico", "2026-08-19": "Carta Cartone", "2026-08-20": "Secco", "2026-08-21": "Umido Organico", "2026-08-25": "Umido Organico", "2026-08-27": "Verde e Ramaglie (VR)", "2026-08-28": "Umido Organico", "2026-08-31": "Vetro Plastica Lattine",
+
+// SETTEMBRE 2026
+"2026-09-01": "Umido Organico", "2026-09-02": "Carta Cartone", "2026-09-03": "Secco", "2026-09-04": "Umido Organico", "2026-09-08": "Umido Organico", "2026-09-10": "Verde e Ramaglie (VR)", "2026-09-11": "Umido Organico", "2026-09-14": "Vetro Plastica Lattine", "2026-09-15": "Umido Organico", "2026-09-16": "Carta Cartone", "2026-09-17": "Secco", "2026-09-18": "Umido Organico", "2026-09-22": "Umido Organico", "2026-09-24": "Verde e Ramaglie (VR)", "2026-09-25": "Umido Organico", "2026-09-28": "Vetro Plastica Lattine", "2026-09-29": "Umido Organico", "2026-09-30": "Carta Cartone",
+
+// OTTOBRE 2026
+"2026-10-01": "Secco", "2026-10-02": "Umido Organico", "2026-10-06": "Umido Organico", "2026-10-08": "Verde e Ramaglie (VR)", "2026-10-09": "Umido Organico", "2026-10-12": "Vetro Plastica Lattine", "2026-10-13": "Umido Organico", "2026-10-14": "Carta Cartone", "2026-10-15": "Secco", "2026-10-16": "Umido Organico", "2026-10-20": "Umido Organico", "2026-10-22": "Verde e Ramaglie (VS)", "2026-10-23": "Umido Organico", "2026-10-26": "Vetro Plastica Lattine", "2026-10-27": "Umido Organico", "2026-10-28": "Carta Cartone", "2026-10-29": "Secco", "2026-10-30": "Umido Organico",
+
+// NOVEMBRE 2026
+"2026-11-03": "Umido Organico", "2026-11-05": "Verde e Ramaglie (VR)", "2026-11-06": "Umido Organico", "2026-11-09": "Vetro Plastica Lattine", "2026-11-10": "Umido Organico", "2026-11-11": "Carta Cartone", "2026-11-12": "Secco", "2026-11-13": "Umido Organico", "2026-11-17": "Umido Organico", "2026-11-19": "Verde e Ramaglie (VR)", "2026-11-20": "Umido Organico", "2026-11-23": "Vetro Plastica Lattine", "2026-11-24": "Umido Organico", "2026-11-25": "Carta Cartone", "2026-11-26": "Secco", "2026-11-27": "Umido Organico",
+
+// DICEMBRE 2026
+"2026-12-01": "Umido Organico", "2026-12-04": "Umido Organico", "2026-12-07": "Vetro Plastica Lattine", "2026-12-08": "Umido Organico", "2026-12-09": "Carta Cartone", "2026-12-10": "Secco", "2026-12-11": "Umido Organico", "2026-12-15": "Umido Organico", "2026-12-17": "Verde e Ramaglie (VR)", "2026-12-18": "Umido Organico", "2026-12-21": "Vetro Plastica Lattine", "2026-12-22": "Umido Organico", "2026-12-23": "Carta Cartone", "2026-12-24": "Secco", "2026-12-26": "Umido Organico", "2026-12-29": "Umido Organico",
+
+// GENNAIO 2027
+"2027-01-02": "Umido Organico", "2027-01-04": "Vetro Plastica Lattine", "2027-01-05": "Umido Organico", "2027-01-06": "Carta Cartone", "2027-01-07": "Secco", "2027-01-08": "Umido Organico", "2027-01-12": "Umido Organico", "2027-01-14": "Verde e Ramaglie (VR)", "2027-01-15": "Umido Organico", "2027-01-18": "Vetro Plastica Lattine", "2027-01-19": "Umido Organico", "2027-01-20": "Carta Cartone", "2027-01-21": "Secco", "2027-01-22": "Umido Organico", "2027-01-26": "Umido Organico", "2027-01-29": "Umido Organico",
+
+// FEBBRAIO 2027
+"2027-02-01": "Vetro Plastica Lattine", "2027-02-02": "Umido Organico", "2027-02-03": "Carta Cartone", "2027-02-04": "Secco", "2027-02-05": "Umido Organico", "2027-02-09": "Umido Organico", "2027-02-11": "Verde e Ramaglie (VR)", "2027-02-12": "Umido Organico", "2027-02-15": "Vetro Plastica Lattine", "2027-02-16": "Umido Organico", "2027-02-17": "Carta Cartone", "2027-02-18": "Secco", "2027-02-19": "Umido Organico", "2027-02-23": "Umido Organico", "2027-02-26": "Umido Organico"
+
         };
-        
-        const collectionMap = {
-            'UO': 'UO (Frazione Organica)', 
-            'S': 'S (Rifiuto Secco)', 
-            'C': 'C (Carta Cartone Tetrapak)', 
-            'P': 'P (Plastica)', 
-            'VR': 'VR (Verde)', 
-            'VL': 'VL (Vetro Lattine)', 
-            'UO VL': 'UO (Frazione Organica) e VL (Vetro Lattine)', 
-            'VS': 'VS (Raccolta straordinaria del verde)',
-            'UO VR': 'UO (Frazione Organica) e VR (Verde)',
-            'UO VS': 'UO (Frazione Organica) e VS (Raccolta straordinaria del verde)'
+
+        const icons = {
+            "Umido Organico": { icon: "🍂", color: "bg-orange-100 text-orange-800" },
+            "Carta e Cartone": { icon: "📦", color: "bg-blue-100 text-blue-800" },
+            "Secco": { icon: "🗑️", color: "bg-gray-200 text-gray-800" },
+            "Plastica": { icon: "🥤", color: "bg-yellow-100 text-yellow-800" },
+            "Vetro e Lattine": { icon: "🍾", color: "bg-teal-100 text-teal-800" },
+            "Vetro, Plastica e Lattine": { icon: "♻️", color: "bg-cyan-100 text-cyan-800" },
+            "Verde e Ramaglie": { icon: "🌿", color: "bg-green-100 text-green-800" },
+            "Nessuno": { icon: "❌", color: "bg-red-50 text-red-400" },
+            "Default": { icon: "😴", color: "bg-slate-100 text-slate-400" }
         };
 
-        let currentDate = new Date();
-        let currentCollectionDescription = "Nessuna raccolta";
+        let viewerDate = new Date();
+        // Imposta domani come default
+        viewerDate.setDate(viewerDate.getDate() + 1);
 
-        // --- DOM ELEMENTS ---
-        const currentDayDisplay = document.getElementById('current-day-display');
-        const collectionScheduleEl = document.getElementById('collection-schedule');
-
-        // --- CALENDAR LOGIC ---
-        function updateDisplay() {
-            const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const today = new Date(); today.setHours(0,0,0,0);
-            const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-            
-            let datePrefix = '';
-            const normalizedCurrentDate = new Date(currentDate); normalizedCurrentDate.setHours(0,0,0,0);
-
-            if (normalizedCurrentDate.getTime() === today.getTime()) datePrefix = 'Oggi, ';
-            else if (normalizedCurrentDate.getTime() === tomorrow.getTime()) datePrefix = 'Domani, ';
-            
-            let formattedDate = currentDate.toLocaleDateString('it-IT', displayOptions);
-            formattedDate = datePrefix + formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-            currentDayDisplay.innerText = formattedDate;
-
-            const scheduleKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-            const collectionCode = schedule[scheduleKey];
-            
-            currentCollectionDescription = "Nessuna raccolta";
-            if (collectionCode) {
-                // Gestisco le note tra parentesi (es. UO (Liberazione) -> UO)
-                const cleanCode = collectionCode.split(' ')[0];
-                currentCollectionDescription = collectionMap[collectionCode] || collectionMap[cleanCode] || collectionCode;
-                
-                // Aggiungo la nota se presente
-                if (collectionCode.includes('(')) {
-                    currentCollectionDescription += ` ${collectionCode.substring(collectionCode.indexOf('('))}`;
-                }
-            }
-
-            collectionScheduleEl.innerHTML = `È prevista la raccolta di: <br><span class="font-bold text-red-600 text-xl sm:text-2xl mt-2 block">${currentCollectionDescription}</span>`;
+        function formatDateKey(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
         }
 
-        // --- EVENT LISTENER ---
-        document.getElementById('next-day').addEventListener('click', () => { currentDate.setDate(currentDate.getDate() + 1); updateDisplay(); });
-        document.getElementById('prev-day').addEventListener('click', () => { currentDate.setDate(currentDate.getDate() - 1); updateDisplay(); });
-        document.getElementById('go-to-today').addEventListener('click', () => { currentDate = new Date(); updateDisplay(); });
-        
-        // --- INITIALIZATION ---
-        window.onload = updateDisplay;
+        function getLabel(date) {
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+
+            if (date.toDateString() === today.toDateString()) return "Oggi";
+            if (date.toDateString() === tomorrow.toDateString()) return "Domani";
+            
+            return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function render() {
+            const key = formatDateKey(viewerDate);
+            const content = wasteData[key] || "Nessuna raccolta prevista";
+            const label = getLabel(viewerDate);
+            
+            // Aggiorna Header
+            document.getElementById('date-label').innerText = label;
+            document.getElementById('full-date').innerText = viewerDate.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            // Trova icona e stile
+            let type = "Default";
+            if (content.includes("Umido")) type = "Umido Organico";
+            else if (content.includes("Carta")) type = "Carta e Cartone";
+            else if (content.includes("Secco")) type = "Secco";
+            else if (content.includes("Vetro, Plastica")) type = "Vetro, Plastica e Lattine";
+            else if (content.includes("Plastica")) type = "Plastica";
+            else if (content.includes("Vetro")) type = "Vetro e Lattine";
+            else if (content.includes("Verde")) type = "Verde e Ramaglie";
+            else if (content.includes("Nessuno")) type = "Nessuno";
+
+            const style = icons[type];
+
+            const html = `
+                <div class="flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                    <div class="w-24 h-24 ${style.color} rounded-full flex items-center justify-center text-5xl mb-6 shadow-sm">
+                        ${style.icon}
+                    </div>
+                    <div class="text-center">
+                        <p class="text-gray-500 text-sm uppercase font-bold tracking-widest mb-1">Cosa esporre:</p>
+                        <h2 class="text-2xl font-bold text-gray-800 leading-tight">
+                            ${content}
+                        </h2>
+                    </div>
+                </div>
+            `;
+            document.getElementById('waste-content').innerHTML = html;
+        }
+
+        function changeDate(days) {
+            viewerDate.setDate(viewerDate.getDate() + days);
+            render();
+        }
+
+        function resetToTomorrow() {
+            viewerDate = new Date();
+            viewerDate.setDate(viewerDate.getDate() + 1);
+            render();
+        }
+
+        // Init
+        window.onload = render;
     </script>
 </body>
 </html>
-
